@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 
+const API_URL = 'https://glorious-funicular-r4w9r774pr4wc5jvq-5000.app.github.dev/api/students';
+
 function App() {
   const [students, setStudents] = useState([]);
   const [form, setForm] = useState({ studentId: '', name: '', email: '' });
 
-  // Lấy danh sách sinh viên từ Backend
   const fetchStudents = async () => {
     try {
-      const res = await fetch('/api/students');
+      const res = await fetch(API_URL);
       const data = await res.json();
       setStudents(data);
     } catch (err) {
@@ -19,27 +20,26 @@ function App() {
     fetchStudents();
   }, []);
 
-  // Gửi request POST thêm sinh viên
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await fetch('/api/students', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
-    });
+    e.preventDefault();
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
 
-    if (res.ok) {
-      setForm({ studentId: '', name: '', email: '' });
-      fetchStudents(); // Chỉ reload danh sách khi thêm thành công
-    } else {
-      const errData = await res.json();
-      alert("Lỗi thêm sinh viên: " + (errData.message || "Trùng mã/email hoặc thiếu thông tin!"));
+      if (res.ok) {
+        setForm({ studentId: '', name: '', email: '' });
+        fetchStudents();
+      } else {
+        const errData = await res.json();
+        alert("Lỗi thêm sinh viên: " + (errData.message || "Không thể thêm!"));
+      }
+    } catch (err) {
+      console.error("Lỗi gửi dữ liệu:", err);
     }
-  } catch (err) {
-    console.error("Lỗi gửi dữ liệu:", err);
-  }
-};
+  };
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
@@ -77,7 +77,7 @@ function App() {
         </thead>
         <tbody>
           {students.map((std) => (
-            <tr key={std._id}>
+            <tr key={std._id || std.studentId}>
               <td>{std.studentId}</td>
               <td>{std.name}</td>
               <td>{std.email}</td>
