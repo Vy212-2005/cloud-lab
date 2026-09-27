@@ -4,6 +4,7 @@ const Student = require("./models/Student");
 
 const app = express();
 
+// Middleware xử lý CORS
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -20,6 +21,7 @@ mongoose.connect(MONGODB_URI)
     .then(() => console.log("MongoDB connected"))
     .catch((err) => console.log("MongoDB connection error:", err));
 
+// 1. GET: Lấy danh sách sinh viên
 app.get("/api/students", async (req, res) => {
     try {
         const students = await Student.find();
@@ -29,6 +31,7 @@ app.get("/api/students", async (req, res) => {
     }
 });
 
+// 2. POST: Thêm sinh viên mới (Câu 91 & 105)
 app.post("/api/students", async (req, res) => {
     try {
         const student = new Student(req.body);
@@ -36,6 +39,32 @@ app.post("/api/students", async (req, res) => {
         res.status(201).json(student);
     } catch (error) {
         res.status(400).json({ message: "Lỗi thêm sinh viên", error: error.message });
+    }
+});
+
+// 3. PUT: Cập nhật sinh viên theo ID (Câu 106)
+app.put("/api/students/:id", async (req, res) => {
+    try {
+        const updatedStudent = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedStudent) {
+            return res.status(404).json({ message: "Không tìm thấy sinh viên" });
+        }
+        res.json(updatedStudent);
+    } catch (error) {
+        res.status(400).json({ message: "Lỗi cập nhật sinh viên", error: error.message });
+    }
+});
+
+// 4. DELETE: Xóa sinh viên theo ID (Câu 107)
+app.delete("/api/students/:id", async (req, res) => {
+    try {
+        const deletedStudent = await Student.findByIdAndDelete(req.params.id);
+        if (!deletedStudent) {
+            return res.status(404).json({ message: "Không tìm thấy sinh viên" });
+        }
+        res.json({ message: "Xóa sinh viên thành công" });
+    } catch (error) {
+        res.status(400).json({ message: "Lỗi xóa sinh viên", error: error.message });
     }
 });
 

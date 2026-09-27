@@ -43,7 +43,7 @@ function App() {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Quản Lý Sinh Viên</h1>
+      <h1>Hệ thống Quản Lý Sinh Viên</h1>
 
       <form onSubmit={handleSubmit} style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
         <input 
