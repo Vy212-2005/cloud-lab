@@ -3,6 +3,25 @@ const mongoose = require("mongoose");
 const Student = require("./models/Student");
 
 const app = express();
+const cors = require('cors');
+
+// Cấu hình CORS linh hoạt cho Production
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(null, true);
+    }
+  },
+  credentials: true
+}));
 
 // Middleware xử lý CORS
 app.use((req, res, next) => {
