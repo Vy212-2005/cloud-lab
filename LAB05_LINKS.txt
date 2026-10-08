@@ -1,0 +1,11 @@
+GIT HUB REPOSITORY:
+https://github.com/<username>/cloud-lab
+
+DOCKER HUB BACKEND:
+https://hub.docker.com/repository/docker/vy212/mern-backend
+
+RENDER BACKEND URL:
+https://mern-backend-234849.onrender.com
+
+RENDER FRONTEND APP URL:
+https://mern-frontend-234849.onrender.com
