@@ -22,6 +22,11 @@ mongoose.connect(MONGODB_URI)
     .catch((err) => console.log("MongoDB connection error:", err));
 
 // 1. GET: Lấy danh sách sinh viên
+app.get("/api/hello", (req, res) => {
+  res.json({
+    message: "Hello from MERN Backend!"
+  });
+});
 app.get("/api/students", async (req, res) => {
     try {
         const students = await Student.find();
